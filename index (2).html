@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trip Packing｜海外の持ち物、抜けなく</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,600;1,700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky:#29A6DD;--sky-deep:#1B8CC1;--sky-soft:#E4F3FB;--sky-tint:#F0F9FE;
+    --cream:#ECE7DA;--ink:#20303F;--ink-soft:#7A8896;--mute:#A6B2BC;
+    --card:#FFFFFF;--line:#EBF1F5;--line-2:#D8E3EB;--ok:#37B57E;
+    --off-bg:#EEF2F5;--off-fg:#9AA7B2;
+    --land:#8FCBA0;--land-line:#FFFFFF;
+    --shadow-sm:0 2px 8px rgba(41,109,150,.06);--shadow:0 6px 22px rgba(41,109,150,.10);
+    --shadow-lg:0 12px 34px rgba(41,109,150,.16);--r:22px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{font-family:"Plus Jakarta Sans","Noto Sans JP",system-ui,sans-serif;background:var(--sky-soft);
+    color:var(--ink);line-height:1.6;padding:0 16px 120px;position:relative;overflow-x:hidden;}
+  body::before,body::after{content:"";position:fixed;border-radius:50%;
+    border:1.5px solid rgba(41,166,221,.14);pointer-events:none;z-index:0;}
+  body::before{width:520px;height:520px;top:-160px;right:-220px}
+  body::after{width:640px;height:640px;bottom:-260px;left:-280px}
+
+  .layout{display:grid;grid-template-columns:minmax(0,500px) 300px;gap:24px;justify-content:center;
+    align-items:start;max-width:860px;margin:0 auto;position:relative;z-index:1}
+  .main{min-width:0}
+  .side{position:sticky;top:20px;display:flex;flex-direction:column;gap:16px}
+  @media(max-width:900px){.layout{grid-template-columns:1fr;max-width:500px}.side{position:static}}
+
+  .greet{padding:26px 4px 14px}
+  .greet .hi{font-size:13px;color:var(--ink-soft);font-weight:600}
+  .greet h1{font-weight:800;font-size:clamp(22px,6vw,27px);line-height:1.25;margin-top:3px;letter-spacing:-.01em}
+  .ad-disc{font-size:11px;color:var(--ink-soft);margin-top:6px}
+
+  .hero{background:linear-gradient(135deg,var(--sky),#37B8E8);color:#fff;border-radius:var(--r);
+    padding:20px 22px;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+  .hero::after{content:"🧳";position:absolute;right:14px;bottom:-8px;font-size:74px;opacity:.22;transform:rotate(-8deg)}
+  .hero h2{font-size:18px;font-weight:800;line-height:1.3;position:relative;z-index:1}
+  .hero p{font-size:13px;opacity:.92;margin-top:4px;max-width:26ch;position:relative;z-index:1}
+
+  .section-t{display:flex;align-items:baseline;justify-content:space-between;margin:24px 4px 12px}
+  .section-t h3{font-size:16px;font-weight:800}
+  .section-t span{font-size:12px;color:var(--sky);font-weight:700}
+
+  .setup{background:var(--card);border-radius:var(--r);padding:18px;box-shadow:var(--shadow-sm)}
+  .field + .field{margin-top:16px}
+  .field > label{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700;margin-bottom:9px}
+  .field > label .dot{width:7px;height:7px;border-radius:50%;background:var(--sky)}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{position:relative}
+  .chip input{position:absolute;inset:0;opacity:0;cursor:pointer}
+  .chip span{display:inline-flex;align-items:center;gap:5px;padding:9px 14px;border-radius:14px;
+    background:var(--sky-tint);color:var(--ink-soft);font-size:13px;font-weight:600;cursor:pointer;transition:.15s;}
+  .chip input:checked + span{background:var(--sky);color:#fff;box-shadow:0 4px 12px rgba(41,166,221,.3)}
+  .chip input:focus-visible + span{outline:2px solid var(--sky-deep);outline-offset:2px}
+
+  .mapwrap{border:1.5px solid var(--line-2);border-radius:16px;padding:6px 6px 2px;margin-bottom:12px;overflow:hidden}
+  .worldmap{width:100%;height:auto;display:block;border-radius:12px}
+  .worldmap .land path{fill:var(--land);stroke:var(--land-line);stroke-width:1;stroke-linejoin:round;transition:fill .25s}
+  .worldmap .region.on path{fill:var(--sky)}
+  .map-cap{font-size:12px;color:var(--sky-deep);font-weight:700;text-align:center;padding:8px 4px 6px}
+
+  .go{width:100%;margin-top:18px;padding:15px;border:none;border-radius:16px;background:var(--sky);color:#fff;
+    font-family:"Plus Jakarta Sans",sans-serif;font-weight:800;font-size:16px;cursor:pointer;
+    box-shadow:0 8px 20px rgba(41,166,221,.32);transition:.15s;display:flex;align-items:center;justify-content:center;gap:8px}
+  .go:hover{background:var(--sky-deep);transform:translateY(-1px)}
+  .go:active{transform:translateY(0)}
+  .go.ghost{background:#fff;color:var(--sky-deep);box-shadow:var(--shadow-sm)}
+  .go.ghost:hover{background:var(--sky-soft)}
+
+  .prog{display:flex;align-items:center;gap:12px;margin:16px 4px 4px}
+  .prog .bar{flex:1;height:9px;background:#fff;border-radius:20px;overflow:hidden;box-shadow:inset 0 0 0 1px var(--line-2)}
+  .prog .bar > i{display:block;height:100%;width:0;background:var(--ok);border-radius:20px;transition:.3s}
+  .prog .c{font-size:12px;font-weight:700;color:var(--ink-soft);white-space:nowrap}
+  .trip-chips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0}
+  .tchip{font-size:11px;font-weight:700;background:#fff;color:var(--sky-deep);border-radius:20px;padding:4px 11px;box-shadow:var(--shadow-sm)}
+
+  /* per-item shop links & booking: 確認モードのみ表示。essentialsは常時表示。 */
+  #out:not(.buy) .booking,
+  #out:not(.buy) .buys{display:none}
+  /* 確認モード：チェック済みは非表示（未チェックだけ残す） */
+  #out.buy ul.items li.done{display:none}
+
+  .essentials{margin-top:14px}
+  .ess-head{display:flex;align-items:center;gap:6px;margin:0 4px 10px}
+  .ess-head h3{font-size:16px;font-weight:800}
+  .ess-head .pr{margin-left:auto;font-size:9px;font-weight:800;letter-spacing:.1em;color:var(--mute);border:1px solid var(--line-2);border-radius:5px;padding:2px 6px}
+  .ess-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+  @media(max-width:560px){.ess-grid{grid-template-columns:1fr}}
+  .ess{background:var(--card);border-radius:18px;padding:14px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;min-width:0}
+  .ess .ic{font-size:26px;margin-bottom:6px}
+  .ess h4{font-size:13.5px;font-weight:800;margin-bottom:2px}
+  .ess p{font-size:11.5px;color:var(--ink-soft);line-height:1.45;flex:1;margin-bottom:10px;overflow-wrap:anywhere}
+  .ess a{text-decoration:none;text-align:center;font-size:12.5px;font-weight:800;padding:9px;border-radius:12px;background:var(--sky);color:#fff;transition:.15s}
+  .ess a:hover{background:var(--sky-deep)}
+  .ess a.off,.ess a.off:hover{background:var(--off-bg);color:var(--off-fg);cursor:not-allowed}
+
+  .cat{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow-sm);margin-top:14px;overflow:hidden}
+  .cat > h3{font-size:15px;font-weight:800;padding:15px 18px 12px;display:flex;align-items:center;gap:8px}
+  .cat > h3 .n{margin-left:auto;font-size:11px;font-weight:800;color:var(--sky-deep);background:var(--sky-soft);border-radius:20px;padding:3px 10px}
+  ul.items{list-style:none;padding:0 18px 6px}
+  ul.items li{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+  .cb{appearance:none;-webkit-appearance:none;flex:none;width:22px;height:22px;border:2px solid var(--line-2);
+    border-radius:7px;cursor:pointer;position:relative;transition:.12s;background:#fff;margin-top:1px}
+  .cb:checked{background:var(--sky);border-color:var(--sky)}
+  .cb:checked::after{content:"✓";position:absolute;inset:0;color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center}
+  .cb:focus-visible{outline:2px solid var(--sky-deep);outline-offset:2px}
+  .emo{font-size:19px;flex:none;width:22px;text-align:center;line-height:1.3}
+  .it-main{flex:1;min-width:0}
+  .it-name{font-size:14.5px;font-weight:600}
+  .it-name .must{font-size:9px;font-weight:800;color:var(--sky-deep);background:var(--sky-soft);border-radius:5px;padding:1px 5px;margin-left:6px;vertical-align:middle}
+  .it-note{font-size:12px;color:var(--ink-soft);line-height:1.45;margin-top:1px;overflow-wrap:anywhere}
+  li.done .emo{filter:grayscale(1);opacity:.5}
+  li.done .it-name{text-decoration:line-through;color:var(--mute);font-weight:500}
+  li.done .it-note{text-decoration:line-through;color:var(--mute)}
+
+  /* shop buttons: 説明文の下に配置（重なり防止） */
+  .buys{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+  .buy{text-decoration:none;font-size:11.5px;font-weight:800;white-space:nowrap;padding:6px 11px;border-radius:11px;
+    background:var(--sky-soft);color:var(--sky-deep);transition:.15s}
+  .buy:hover{background:var(--sky);color:#fff}
+  .buy.amz{background:#FDF3DD;color:#B4820C}
+  .buy.amz:hover{background:#E0A106;color:#fff}
+  .buy.rkt{background:#FCE7E7;color:#C4262E}
+  .buy.rkt:hover{background:#BF0000;color:#fff}
+  .buy.off,.buy.off:hover{background:var(--off-bg);color:var(--off-fg);cursor:not-allowed}
+
+  .booking{background:var(--cream);border-radius:var(--r);padding:20px;margin-top:18px;position:relative;overflow:hidden;box-shadow:var(--shadow-sm)}
+  .booking::after{content:"🏝️";position:absolute;right:12px;bottom:-6px;font-size:60px;opacity:.35}
+  .booking h4{font-size:17px;font-weight:800;position:relative;z-index:1}
+  .booking p{font-size:12.5px;color:#7A705A;margin-top:3px;max-width:30ch;position:relative;z-index:1;overflow-wrap:anywhere}
+  .booking .bt{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;position:relative;z-index:1}
+  .booking .bt a{text-decoration:none;font-size:13px;font-weight:800;padding:10px 16px;border-radius:13px;background:var(--sky);color:#fff;transition:.15s}
+  .booking .bt a:hover{background:var(--sky-deep)}
+  .booking .bt a.alt{background:#fff;color:var(--ink)}
+  .booking .bt a.alt:hover{box-shadow:var(--shadow-sm)}
+  .booking .bt a.off,.booking .bt a.off:hover{background:var(--off-bg);color:var(--off-fg);cursor:not-allowed}
+
+  .modebar{margin-top:18px}
+  .mode-btn{width:100%;padding:14px;border:2px solid var(--sky);border-radius:16px;background:#fff;color:var(--sky-deep);
+    font-family:inherit;font-weight:800;font-size:14px;cursor:pointer;transition:.15s;display:flex;align-items:center;justify-content:center;gap:8px}
+  .mode-btn:hover{background:var(--sky);color:#fff}
+  .modebanner{margin-top:10px;background:#FFF7E6;border:1.5px solid #F1D48A;border-radius:14px;
+    padding:11px 14px;font-size:13px;font-weight:700;color:#8A6D1E;text-align:center}
+  .modebanner b{color:#B4820C;font-size:16px}
+
+  .empty{background:var(--card);border-radius:var(--r);padding:44px 24px;text-align:center;box-shadow:var(--shadow-sm)}
+  .empty .big{font-size:52px}
+  .empty p{font-size:14px;color:var(--ink-soft);margin-top:10px;max-width:30ch;margin-inline:auto}
+
+  .adcard{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow-sm);padding:12px}
+  .ad-lab{font-size:9px;font-weight:800;letter-spacing:.14em;color:var(--mute);margin:0 2px 8px}
+  .ad-slot{display:block;text-decoration:none;border-radius:14px;overflow:hidden}
+  .ad-slot img{width:100%;display:block}
+  .ad-ph{aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-size:30px;
+    background:repeating-linear-gradient(45deg,var(--sky-tint),var(--sky-tint) 12px,#fff 12px,#fff 24px);color:var(--ink-soft)}
+  .ad-ph span{font-size:12px;font-weight:700}
+
+  .slideshow{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow-sm);overflow:hidden}
+  .frame{position:relative;height:360px}
+  .slide{position:absolute;inset:0;opacity:0;transition:opacity .8s ease;background:var(--g);
+    display:flex;flex-direction:column;justify-content:flex-end;padding:18px;color:#fff}
+  .slide::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.4))}
+  .slide.on{opacity:1}
+  .slide h4{font-family:"Playfair Display",serif;font-weight:700;font-style:italic;font-size:30px;line-height:1.05;
+    position:relative;z-index:1;text-shadow:0 2px 10px rgba(0,0,0,.45)}
+  .slide span{font-family:"Plus Jakarta Sans",sans-serif;font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+    opacity:.95;position:relative;z-index:1;text-shadow:0 1px 5px rgba(0,0,0,.4);margin-top:4px}
+  .dots{position:absolute;bottom:14px;right:14px;display:flex;gap:6px;z-index:2}
+  .dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.55);cursor:pointer;transition:.2s}
+  .dots i.on{background:#fff;width:18px;border-radius:20px}
+
+  .nav{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:20;display:flex;align-items:center;gap:4px;
+    background:var(--sky);padding:6px;border-radius:30px;box-shadow:var(--shadow-lg)}
+  .nav button{border:none;background:transparent;color:rgba(255,255,255,.85);cursor:pointer;font-family:inherit;
+    font-weight:700;font-size:13px;padding:10px 16px;border-radius:24px;display:flex;align-items:center;gap:7px;transition:.15s}
+  .nav button:hover{color:#fff}
+  .nav button.active{background:#fff;color:var(--sky-deep)}
+  .nav button:disabled{opacity:.4;cursor:not-allowed;color:rgba(255,255,255,.5)}
+  .nav button:disabled:hover{color:rgba(255,255,255,.5)}
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="greet">
+      <div class="hi">こんにちは 👋</div>
+      <h1>次の旅、忘れ物なしで。</h1>
+      <div class="ad-disc">※ 本ページは広告（アフィリエイト）を含みます</div>
+    </div>
+
+    <div class="hero">
+      <h2>行き先を選ぶだけ 🌍</h2>
+      <p>気候・日数・同行者に合わせた、あなた専用の海外パッキングリストを自動作成。</p>
+    </div>
+
+    <div class="section-t"><h3>旅の条件</h3><span>Setup</span></div>
+
+    <div class="setup" id="setup">
+      <div class="field">
+        <label><span class="dot"></span>行き先タイプ</label>
+        <div class="mapwrap">
+          <svg class="worldmap" id="worldmap" viewBox="0 0 340 190" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs><linearGradient id="ocean" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#EAF6FD"/><stop offset="1" stop-color="#CDEAF8"/>
+            </linearGradient></defs>
+            <rect x="0" y="0" width="340" height="190" rx="12" fill="url(#ocean)"/>
+            <g class="land">
+              <g class="region" data-r="europe"><path d="M60,58 L84,54 L96,62 L92,72 L98,80 L86,84 L74,82 L64,88 L56,80 L58,68 Z"/></g>
+              <g class="region" data-r="africa"><path d="M84,92 L112,90 L118,106 L112,124 L102,148 L94,166 L86,154 L82,132 L78,112 L80,100 Z"/></g>
+              <g class="region" data-r="asia"><path d="M96,58 L150,48 L198,50 L228,60 L240,74 L232,90 L214,98 L200,92 L184,100 L166,96 L150,102 L130,98 L112,90 L100,76 Z"/></g>
+              <g class="region" data-r="seasia"><path d="M198,104 q9,-3 13,4 q-2,8 -11,7 q-8,-3 -2,-11 Z M214,114 q9,0 11,8 q-6,5 -12,2 q-5,-6 1,-10 Z M226,100 q6,-1 7,5 q-4,4 -8,1 q-3,-4 1,-6 Z"/></g>
+              <g class="region" data-r="australia"><path d="M212,140 C202,144 205,159 219,163 C235,167 249,159 246,145 C243,133 226,132 212,140 Z"/></g>
+              <g class="region" data-r="namerica"><path d="M250,50 L284,46 L314,54 L324,70 L310,82 L298,76 L290,92 L276,108 L266,98 L272,82 L258,72 L248,62 Z"/></g>
+              <g class="region" data-r="samerica"><path d="M288,116 C280,122 284,142 294,158 C301,172 315,175 314,157 C316,137 306,120 298,113 C294,111 291,112 288,116 Z"/></g>
+            </g>
+          </svg>
+          <div class="map-cap" id="mapCap"></div>
+        </div>
+        <div class="chips" data-g="dest">
+          <label class="chip"><input type="radio" name="dest" value="asia" checked><span>🏙 アジア近郊</span></label>
+          <label class="chip"><input type="radio" name="dest" value="west"><span>🗼 欧米の都市</span></label>
+          <label class="chip"><input type="radio" name="dest" value="resort"><span>🏖 リゾート</span></label>
+          <label class="chip"><input type="radio" name="dest" value="wild"><span>⛰ 秘境・自然</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label><span class="dot"></span>季節・気候</label>
+        <div class="chips" data-g="climate">
+          <label class="chip"><input type="radio" name="climate" value="hot" checked><span>☀️ 常夏・暑い</span></label>
+          <label class="chip"><input type="radio" name="climate" value="mild"><span>🍃 温暖</span></label>
+          <label class="chip"><input type="radio" name="climate" value="cold"><span>❄️ 寒い・冬</span></label>
+          <label class="chip"><input type="radio" name="climate" value="rain"><span>🌧 雨季</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label><span class="dot"></span>日数</label>
+        <div class="chips" data-g="days">
+          <label class="chip"><input type="radio" name="days" value="short" checked><span>1〜3日</span></label>
+          <label class="chip"><input type="radio" name="days" value="week"><span>4〜7日</span></label>
+          <label class="chip"><input type="radio" name="days" value="long"><span>8〜14日</span></label>
+          <label class="chip"><input type="radio" name="days" value="xlong"><span>15日〜</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label><span class="dot"></span>同行者</label>
+        <div class="chips" data-g="who">
+          <label class="chip"><input type="radio" name="who" value="solo" checked><span>🧍 ひとり</span></label>
+          <label class="chip"><input type="radio" name="who" value="couple"><span>💑 カップル</span></label>
+          <label class="chip"><input type="radio" name="who" value="kids"><span>👨‍👩‍👧 子連れ</span></label>
+          <label class="chip"><input type="radio" name="who" value="senior"><span>🧓 シニアと</span></label>
+        </div>
+      </div>
+      <button class="go" id="gen">✈️ リストを作成する</button>
+    </div>
+
+    <div id="out"></div>
+
+    <div class="empty" id="empty">
+      <div class="big">🧳</div>
+      <p>条件を選んで「リストを作成する」を押すと、ここに専用の持ち物リストが表示されます。</p>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="side">
+    <div class="adcard">
+      <div class="ad-lab">広告</div>
+      <a class="ad-slot" id="adSlot" href="#"></a>
+    </div>
+    <div class="slideshow">
+      <div class="frame" id="sframe"></div>
+      <div class="dots" id="sdots"></div>
+    </div>
+  </aside>
+
+</div>
+
+<div class="nav">
+  <button id="nav0" class="active" onclick="goSetup()">⚙️ 条件</button>
+  <button id="nav1" onclick="goList()">📋 リスト</button>
+  <button id="nav2" onclick="goBuy()" disabled>✅ 確認</button>
+</div>
+
+<script>
+/* ========================================================================
+   ★★★ アフィリエイト／広告リンク設定 ★★★  "#" を自分のリンク（URL）へ置き換える。
+   ・"#" のままなら無効（グレー・クリック不可）。target="_blank" と rel="sponsored" は自動付与。
+   ・adBanner … 右のバナー広告（img=画像URL, href=リンク先）
+   ======================================================================== */
+const AFFILIATE = {
+  esim:        "#",
+  insurance:   "#",
+  travelset:   "#",
+  booking:     "#",
+  flightHotel: "#",
+  amazon:      "#",   // ★Amazonアソシエイト
+  rakuten:     "#",   // ★楽天アフィリエイト
+  adBanner:    { href:"#", img:"#" }  // ★右のバナー広告
+};
+/* ====================================================================== */
+
+const SCENERY = [
+  {name:"Paris",     sub:"France",     g:"linear-gradient(135deg,#8EC5FC,#E0C3FC)"},
+  {name:"Bali",      sub:"Indonesia",  g:"linear-gradient(135deg,#43E97B,#38F9D7)"},
+  {name:"Iceland",   sub:"Nordic",     g:"linear-gradient(135deg,#4FACFE,#00F2FE)"},
+  {name:"Santorini", sub:"Greece",     g:"linear-gradient(135deg,#5EE7DF,#B490CA)"},
+  {name:"New York",  sub:"USA",        g:"linear-gradient(135deg,#FDCB82,#F97794)"}
+];
+
+const DEST_MAP = {
+  asia:   {regions:["asia","seasia"],     cap:"日本から近いアジア圏（韓国・台湾・タイなど）"},
+  west:   {regions:["europe","namerica"], cap:"ヨーロッパ・北米の都市（パリ・ロンドン・NYなど）"},
+  resort: {regions:["seasia","australia"],cap:"常夏のビーチ・島リゾート（ハワイ・バリ・グアムなど）"},
+  wild:   {regions:["samerica","africa"], cap:"大自然・秘境（南米・アフリカ・アイスランドなど）"}
+};
+function updateMap(){
+  const m=DEST_MAP[val("dest")];
+  document.querySelectorAll("#worldmap .region").forEach(g=>g.classList.toggle("on",m.regions.includes(g.dataset.r)));
+  document.getElementById("mapCap").textContent="📍 "+m.cap;
+}
+
+function buildList(dest, climate, days, who){
+  const L={}; const add=(cat,it)=>{(L[cat] ||= []).push(it);};
+  const dayText={short:"2〜3日分",week:"4〜5日分（現地洗濯も想定）",long:"1週間分＋洗濯",xlong:"1週間分＋現地洗濯前提"}[days];
+  const undies={short:"3セット",week:"5〜6セット",long:"7セット＋圧縮袋",xlong:"7セット＋圧縮袋"}[days];
+
+  add("🛂 出国の必需品",{e:"🛂",name:"パスポート",note:"残存有効期間（入国日から6か月以上が目安）を確認",must:1});
+  add("🛂 出国の必需品",{e:"🎫",name:"航空券・eチケット控え",note:"スクショと印刷の両方があると安心"});
+  add("🛂 出国の必需品",{e:"📋",name:"ビザ／ETA・ESTAなど渡航認証",note:"国により要否が違う。事前確認を",must:1});
+  add("🛂 出国の必需品",{e:"🛡️",name:"海外旅行保険の加入証",must:1,buy:{label:"保険を探す",href:AFFILIATE.insurance}});
+  add("🛂 出国の必需品",{e:"💳",name:"現地通貨＋クレジットカード",note:"カードは予備をもう1枚。ブランドを分けると◎"});
+  add("🛂 出国の必需品",{e:"📄",name:"パスポート・カードのコピー",note:"原本と別の場所に保管／写真でも"});
+
+  add("📱 通信・電子機器",{e:"📶",name:"eSIM／海外WiFiルーター",note:"現地SIMより設定が楽。出発前に手配を",must:1,buy:{label:"eSIMを探す",href:AFFILIATE.esim}});
+  add("📱 通信・電子機器",{e:"🔌",name:"変換プラグ",note:"渡航先のプラグ形状を確認（Aタイプ以外が多い）",shop:1});
+  add("📱 通信・電子機器",{e:"🔋",name:"モバイルバッテリー",note:"機内は預け入れ不可・手荷物へ",shop:1});
+  add("📱 通信・電子機器",{e:"⚡",name:"充電ケーブル・充電器一式"});
+  if(dest==="wild"||days==="long"||days==="xlong") add("📱 通信・電子機器",{e:"☀️",name:"予備バッテリー・ソーラー充電",note:"電源が不安定な地域向け",shop:1});
+
+  add("👕 衣類",{e:"🧦",name:"下着・靴下",note:undies});
+  add("👕 衣類",{e:"👕",name:"トップス・ボトムス",note:dayText});
+  if(climate==="hot"||climate==="rain"||dest==="resort"){
+    add("👕 衣類",{e:"🧥",name:"薄手の羽織り",note:"冷房・日焼け対策に1枚"});
+    add("👕 衣類",{e:"🩴",name:"サンダル・水着",note:"リゾートやビーチで活躍",shop:1});
+  }
+  if(climate==="cold"){
+    add("👕 衣類",{e:"🧥",name:"防寒アウター・ヒートテック",note:"重ね着で調整",shop:1});
+    add("👕 衣類",{e:"🧤",name:"手袋・マフラー・ニット帽",shop:1});
+  }
+  if(climate==="mild") add("👕 衣類",{e:"🧥",name:"軽い上着",note:"朝晩の冷え込み対策"});
+  if(climate==="rain") add("👕 衣類",{e:"☔",name:"折りたたみ傘・レインウェア",shop:1});
+  add("👕 衣類",{e:"👟",name:"歩きやすい靴",note:"履き慣れたものを"});
+
+  add("🧴 洗面・衛生・健康",{e:"🪥",name:"歯ブラシ・洗面用具",note:"海外ホテルは歯ブラシが無いことも多い"});
+  add("🧴 洗面・衛生・健康",{e:"💊",name:"常備薬・処方薬",note:"英文の説明があると入国時に安心",must:1});
+  add("🧴 洗面・衛生・健康",{e:"🧴",name:"日焼け止め・リップ"});
+  add("🧴 洗面・衛生・健康",{e:"💄",name:"化粧品・スキンケア",note:"液体は100ml以下で機内持込ルールに注意"});
+  if(climate==="hot"||dest==="resort") add("🧴 洗面・衛生・健康",{e:"🦟",name:"虫よけ・かゆみ止め",shop:1});
+  if(dest==="wild") add("🧴 洗面・衛生・健康",{e:"💧",name:"胃腸薬・経口補水・除菌グッズ",note:"衛生環境が読めない地域向け",shop:1});
+
+  add("🎒 あると便利",{e:"💤",name:"ネックピロー・アイマスク",note:"長時間フライトの快適さが段違い",shop:1});
+  add("🎒 あると便利",{e:"🎒",name:"圧縮袋・パッキングキューブ",note:"荷物が1.5倍入る",shop:1});
+  add("🎒 あると便利",{e:"🛍️",name:"エコバッグ・サブバッグ",note:"現地の買い物・機内用に"});
+  add("🎒 あると便利",{e:"🧻",name:"ジップ袋・ウェットティッシュ"});
+  if(who==="couple"||who==="solo") add("🎒 あると便利",{e:"🔒",name:"南京錠・セキュリティポーチ",note:"防犯対策に",shop:1});
+
+  if(who==="kids"){
+    add("👨‍👩‍👧 子連れの必需品",{e:"🛂",name:"子どものパスポート・母子手帳"});
+    add("👨‍👩‍👧 子連れの必需品",{e:"🍼",name:"おむつ・おしりふき",note:"現地調達しづらいことも。多めに",shop:1});
+    add("👨‍👩‍👧 子連れの必需品",{e:"🌡️",name:"子どもの常備薬・体温計",shop:1});
+    add("👨‍👩‍👧 子連れの必需品",{e:"🍪",name:"おやつ・機内用おもちゃ",note:"ぐずり対策の切り札"});
+    add("👨‍👩‍👧 子連れの必需品",{e:"👶",name:"ベビーカー／抱っこ紐",note:"空港で預けるか機内持込か確認"});
+  }
+  if(who==="senior"){
+    add("🧓 シニアと行く準備",{e:"💊",name:"お薬手帳・常用薬（多めに）",must:1});
+    add("🧓 シニアと行く準備",{e:"👟",name:"歩きやすい靴・杖など",note:"長距離移動に備えて"});
+    add("🧓 シニアと行く準備",{e:"♿",name:"車椅子サポートの事前予約",note:"航空会社へ問い合わせ"});
+  }
+  return L;
+}
+
+const out=document.getElementById("out"), empty=document.getElementById("empty");
+const labelMap={
+  dest:{asia:"アジア近郊",west:"欧米の都市",resort:"リゾート",wild:"秘境・自然"},
+  climate:{hot:"常夏・暑い",mild:"温暖",cold:"寒い・冬",rain:"雨季"},
+  days:{short:"1〜3日",week:"4〜7日",long:"8〜14日",xlong:"15日〜"},
+  who:{solo:"ひとり",couple:"カップル",kids:"子連れ",senior:"シニアと"}
+};
+const val=n=>document.querySelector(`input[name="${n}"]:checked`).value;
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+function aff(href,cls,label){
+  const on=href&&href!=="#";
+  if(on) return `<a class="${cls}" href="${href}" target="_blank" rel="sponsored noopener">${label}</a>`;
+  return `<a class="${cls} off" href="#" onclick="return false" aria-disabled="true">${label}</a>`;
+}
+function shopButtons(it){
+  let h="";
+  if(it.buy) h+=aff(it.buy.href,"buy",it.buy.label);
+  if(it.shop){h+=aff(AFFILIATE.amazon,"buy amz","Amazon");h+=aff(AFFILIATE.rakuten,"buy rkt","楽天");}
+  return h?`<div class="buys">${h}</div>`:"";
+}
+function hasList(){return out.innerHTML.trim()!=="";}
+
+function render(){
+  const d=val("dest"),c=val("climate"),dy=val("days"),w=val("who");
+  const list=buildList(d,c,dy,w);
+  const isWest=d==="west"||c==="cold";
+  out.classList.remove("buy");
+  let html="";
+
+  html+=`<div class="trip-chips">
+    <span class="tchip">🌍 ${labelMap.dest[d]}</span><span class="tchip">🌡 ${labelMap.climate[c]}</span>
+    <span class="tchip">📅 ${labelMap.days[dy]}</span><span class="tchip">👥 ${labelMap.who[w]}</span></div>`;
+
+  html+=`<div class="essentials"><div class="ess-head"><h3>⚑ まず先に手配</h3><span class="pr">PR</span></div>
+    <div class="ess-grid">
+      <div class="ess"><div class="ic">📶</div><h4>eSIM / WiFi</h4><p>到着した瞬間から使える。現地SIMより簡単。</p>${aff(AFFILIATE.esim,"","プランを探す")}</div>
+      <div class="ess"><div class="ic">🛡️</div><h4>海外旅行保険</h4><p>治療費が高額な国も。カード付帯だけだと不足しがち。</p>${aff(AFFILIATE.insurance,"","保険を比較")}</div>
+      <div class="ess"><div class="ic">${isWest?"🔌":"🧴"}</div><h4>${isWest?"変換プラグ":"トラベルセット"}</h4><p>${isWest?"欧米はプラグ形状が違う。忘れると詰む。":"詰め替えボトルを機内ルール対応で。"}</p>${aff(AFFILIATE.travelset,"","見てみる")}</div>
+    </div></div>`;
+
+  html+=`<div class="prog"><div class="bar"><i id="barfill"></i></div><span class="c" id="count">0 / 0</span></div>`;
+
+  for(const [cat,items] of Object.entries(list)){
+    html+=`<div class="cat"><h3>${cat}<span class="n">${items.length}</span></h3><ul class="items">`;
+    for(const it of items){
+      const must=it.must?`<span class="must">必須</span>`:"";
+      const note=it.note?`<div class="it-note">${esc(it.note)}</div>`:"";
+      html+=`<li><input type="checkbox" class="cb" onchange="tick(this)"><span class="emo">${it.e}</span>
+        <div class="it-main"><span class="it-name">${esc(it.name)}${must}</span>${note}${shopButtons(it)}</div></li>`;
+    }
+    html+=`</ul></div>`;
+  }
+
+  html+=`<div class="booking"><h4>宿・移動の手配 🧳</h4>
+    <p>宿泊先や移動手段もまとめて確認しておくと安心です。</p>
+    <div class="bt">${aff(AFFILIATE.booking,"","宿を探す")}${aff(AFFILIATE.flightHotel,"alt","航空券＋ホテル")}</div></div>`;
+
+  html+=`<div class="modebar">
+    <button class="mode-btn" id="modeBtn" onclick="setBuy(true)">✅ 確認モード（未チェックだけ表示）</button>
+    <div class="modebanner" id="modeBanner" style="display:none"></div>
+  </div>
+  <div style="margin-top:12px"><button class="go ghost" onclick="resetAll()">🔄 最初からやり直す</button></div>`;
+
+  empty.style.display="none";
+  out.innerHTML=html;
+  updateCount();
+  setActive(1);
+  updateConfirmTab();
+  out.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+function tick(cb){
+  cb.closest("li").classList.toggle("done",cb.checked);
+  updateCount();
+  updateConfirmTab();
+  if(out.classList.contains("buy")) refreshBuy();
+}
+function updateCount(){
+  const all=document.querySelectorAll(".cb"),done=document.querySelectorAll(".cb:checked");
+  const c=document.getElementById("count"),f=document.getElementById("barfill");
+  if(!c)return;c.textContent=`${done.length} / ${all.length}`;
+  f.style.width=all.length?(done.length/all.length*100)+"%":"0";
+}
+
+// 確認タブ：何もチェックしておらず、確認モードにも入っていない場合は無効
+function updateConfirmTab(){
+  const anyChecked=document.querySelectorAll(".cb:checked").length>0;
+  const inConfirm=out.classList.contains("buy");
+  document.getElementById("nav2").disabled=!(anyChecked||inConfirm);
+}
+
+// 確認モード（未チェックの項目だけ表示）
+function setBuy(on){
+  if(!hasList())render();
+  const btn=document.getElementById("modeBtn");
+  const banner=document.getElementById("modeBanner");
+  if(on){
+    out.classList.add("buy");refreshBuy();
+    banner.style.display="block";
+    btn.textContent="← 通常のリストに戻る";
+    btn.setAttribute("onclick","setBuy(false)");
+    setActive(2);updateConfirmTab();
+    out.scrollIntoView({behavior:"smooth",block:"start"});
+  }else{
+    out.classList.remove("buy");
+    document.querySelectorAll(".cat").forEach(cat=>cat.style.display="");
+    banner.style.display="none";
+    btn.textContent="✅ 確認モード（未チェックだけ表示）";
+    btn.setAttribute("onclick","setBuy(true)");
+    setActive(1);updateConfirmTab();
+  }
+}
+function refreshBuy(){
+  document.querySelectorAll(".cat").forEach(cat=>{
+    const left=cat.querySelectorAll("li:not(.done)").length;
+    cat.style.display=left?"":"none";
+  });
+  const left=document.querySelectorAll("ul.items li:not(.done)").length;
+  const banner=document.getElementById("modeBanner");
+  if(banner) banner.innerHTML=left
+    ? `✅ 未チェック：あと <b>${left}</b> 個`
+    : `🎉 すべて確認OK！忘れ物なしです`;
+}
+
+function resetAll(){
+  out.classList.remove("buy");out.innerHTML="";empty.style.display="";
+  document.querySelector('input[name="dest"][value="asia"]').checked=true;
+  document.querySelector('input[name="climate"][value="hot"]').checked=true;
+  document.querySelector('input[name="days"][value="short"]').checked=true;
+  document.querySelector('input[name="who"][value="solo"]').checked=true;
+  updateMap();setActive(0);updateConfirmTab();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function setActive(i){["nav0","nav1","nav2"].forEach((id,n)=>document.getElementById(id).classList.toggle("active",n===i));}
+function goSetup(){setActive(0);document.getElementById("setup").scrollIntoView({behavior:"smooth",block:"start"});}
+function goList(){if(!hasList())render();setBuy(false);setActive(1);out.scrollIntoView({behavior:"smooth",block:"start"});}
+function goBuy(){setBuy(true);}
+
+function buildAd(){
+  const slot=document.getElementById("adSlot"), a=AFFILIATE.adBanner;
+  if(a&&a.img&&a.img!=="#") slot.innerHTML=`<img src="${a.img}" alt="広告">`;
+  else slot.innerHTML=`<div class="ad-ph">🖼<span>バナー広告スペース</span></div>`;
+  if(a&&a.href&&a.href!=="#"){slot.href=a.href;slot.target="_blank";slot.rel="sponsored noopener";}
+  else{slot.removeAttribute("href");slot.style.cursor="default";}
+}
+let sIdx=0,sTimer=null;
+function buildSlides(){
+  document.getElementById("sframe").innerHTML=SCENERY.map((s,i)=>
+    `<div class="slide ${i===0?'on':''}" style="--g:${s.g}"><h4>${s.name}</h4><span>${s.sub}</span></div>`).join("");
+  document.getElementById("sdots").innerHTML=SCENERY.map((s,i)=>`<i class="${i===0?'on':''}" onclick="goSlide(${i})"></i>`).join("");
+  sTimer=setInterval(()=>goSlide((sIdx+1)%SCENERY.length),4000);
+}
+function goSlide(i){
+  sIdx=i;
+  document.querySelectorAll("#sframe .slide").forEach((el,n)=>el.classList.toggle("on",n===i));
+  document.querySelectorAll("#sdots i").forEach((el,n)=>el.classList.toggle("on",n===i));
+  clearInterval(sTimer);sTimer=setInterval(()=>goSlide((sIdx+1)%SCENERY.length),4000);
+}
+
+document.getElementById("gen").addEventListener("click",render);
+document.querySelector('[data-g="dest"]').addEventListener("change",updateMap);
+updateMap();buildAd();buildSlides();updateConfirmTab();
+</script>
+</body>
+</html>
